@@ -1,13 +1,10 @@
-import re
-import json
-
-
+import re , json, time
 class JsonByPath():
     
     
     def __init__(self, **data):
         
-        self._path   = re.sub(r'\s|\t|\r|\n',"",data['path'])
+        self._path   = re.sub(r'[\s\t\r\n](?=(\[[^\[]*\]|[^\]])*$)',"",data['path'])
         self._json   = data['json']
         self.value   = list()
         
@@ -40,7 +37,10 @@ class JsonByPath():
         """ 
             Metodo para retornar valores verdadeiros
         """
-        return list(filter(lambda value: value if value else '',values))
+        #flt = list(filter(lambda value: value is not None and value != 0, values))
+        
+        return [value for value in values if value  or  value == 0]
+        
         
     def execute(self, path):
         value = ''
@@ -70,7 +70,14 @@ class JsonByPath():
             
         return current_value
         
-        
+    def isnumber(self, value):
+        try:
+            float(value)
+        except ValueError:
+            return False
+        return True
+    
+    
     def getValue(self, path_splited, initial_value):
         
         value = initial_value
@@ -78,32 +85,44 @@ class JsonByPath():
             try:
                 key = int(key)
                 
-        
+            
             except:
                 pass
                 
-            if not isinstance(key, int) and "*" in key[0] :
+            if (not isinstance(key, int) and ("*" in key[0] or  ("[" in key and "]" in key))) and index != len(path_splited) :
+                
+                _charToJoin = re.findall(r"\'(.*?)\'", key)
+                _charToJoin =  _charToJoin[0] if  _charToJoin else " "
+                
+                key1 = None
+                key2 = None
+                
+                keyS = re.findall(r'\[(.*?)\]', key)
+                if keyS :
+                    keyS = keyS[0].split(":")
+                    key1 , key2 = self.tryInt(keyS[0]) , self.tryInt(keyS[1])
+                    
                 
                 
-                joinChar =  " " if not len(key) > 1 else key[1:]
-                if index == len(path_splited) :
-                    
-                    value =  joinChar.join(map(str, value ))
-                    print("passei aqui")
-                    
-                else :
-                    
-                    value = self.onlyValidValues([ self.getValue(path_splited[ index +1: ],val) for val in value])
-                    
-                    return  joinChar.join(map(str, value ))
+                value = self.onlyValidValues([ self.getValue(path_splited[ index +1: ],val) for val in value])
+                return  _charToJoin.join(map(str, value[  key1:  key2 ] ))
                     
                 
+            
             else :
                 value = self.tryPath(value, key)
             
         return value
         
         
+    def tryInt(self, value) :
+        try:
+            return int(value)
+        except:
+            return None
+        
+        
+    
     
     def tryPath(self, arr, key) :
         try:
@@ -122,27 +141,31 @@ class JsonByPath():
 if __name__ == "__main__":
     
     json_data = {
-        "aqui" : 1500,
-        "quero": {
-            "todos": [
-                    {"nome":"Felipe"}
-                ,   {"teste":"thiago"}
-                ,   {"nome":"Helias"}
+        "want": {
+            "all": [
+                    {"name":"value1"}
+                ,   {"test":"value2"}
+                ,   {"name":"value3"}
             ],
-            "tudo": [ 
-                {"nome":["este-nome", "teste"]}
-               ,{"nome":["este-nome"]}
-               ,{"nome":["este-nome"]}
-               ,{"nome":["este-nome"]}
+            "every": [ 
+                {
+                    "names":{ "data": ["value1","value2","value3", "value4","value5"] }
+                }
+                ,{
+                    "names":{ "data": ["value1","value2","value3", "value4","value5"] }
+                }
+            
             ]
         }
     }
     
-    path = """quero/todos/*,/nome || quero/tudo/*|/nome/*~"""
-    path2 = """aqui"""
+    path = """want/every/*'-'/names/data/[-1: ]'|'"""
+    path2 = """want/all/*/name"""
+    ini = time.time()
+    a= JsonByPath(json=json_data, path=path)
+    b= JsonByPath(json=json_data, path=path2)
+    print(time.time() - ini)
     
-    a= JsonPath(json=json_data, path=path)
-    b= JsonPath(json=json_data, path=path2)
     
     print(a.value + "\n <<<<<<< Aa")
     print(b.value )
