@@ -60,13 +60,13 @@ class JsonByPath():
             return has_quote[0]
 
         path_splited = path.split("/")
-        #current_value = self.tryPath(self._json, path_splited[0])
+        current_value = self.tryPath(self._json, path_splited[0])
 
         # if  not isinstance(current_value, dict) and not isinstance(current_value, list):
         #    current_value = current_value
 
         # else:
-        return self.getValue(path_splited, self._json[path_splited[0]])
+        return self.getValue(path_splited, current_value)
 
         # return current_value
 
@@ -87,7 +87,7 @@ class JsonByPath():
             except:
                 pass
 
-            if (not isinstance(key, int) and ("*" in key[0] or ("[" in key and "]" in key))) and index != len(path_splited):
+            if ( key != '' and not isinstance(key, int) and ("*" in key[0] or ("[" in key and "]" in key))) and index != len(path_splited):
 
                 _charToJoin = re.findall(r"\`(.*?)\`", key)
                 _charToJoin = _charToJoin[0] if _charToJoin else " "
@@ -120,7 +120,7 @@ class JsonByPath():
             return arr[key]
         except:
 
-            self.error_path.append(f"PATH:{self.current_path} - KEY: {key}")
+            self.error_path.append(f"PATH:{self.current_path} - KEY: {key or None}")
 
             """print(
             ###### path pode estar errado #######
@@ -227,7 +227,7 @@ if __name__ == "__main__":
     #result:  My values:  value1 | value2
 
     #Exemple 8
-    #simple example to return array values in a Interval with separator
+    #simple example to return first valid value
     json = {
         "this": {
             "path": "exist"
@@ -238,6 +238,8 @@ if __name__ == "__main__":
     extracted = JsonByPath(json=json, path=path)
     print(extracted.value)
     #result:  exist
+    
+    
 
 
 pass
