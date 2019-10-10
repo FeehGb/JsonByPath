@@ -3,22 +3,24 @@ class JsonByPath():
 
     def __init__(self, **data):
 
-        self._path = re.sub(
+        self.path = re.sub(
             r'[\s\t\r\n](?=(\`[^\`]*\`|[^\`])*$)', "", data['path']
         )
-        self._json = data['json']
+        self.jsonIn = data['json']
         self.value = list()
         self.error_path = list()
 
         self.process()
+        
+        self.current_path = ''
         # print(self.value)
 
     def __repr__(self):
         return self.value
 
     def process(self):
-        self.dict = self.explode(self._path, "||")
-        _filter = self.onlyValidValues(self.dict)
+        self.all = self.explode(self.path, "||")
+        _filter = self.onlyValidValues(self.all)
         if len(_filter):
             self.value = _filter[0]
         else:
@@ -60,7 +62,7 @@ class JsonByPath():
             return has_quote[0]
 
         path_splited = path.split("/")
-        current_value = self.tryPath(self._json, path_splited[0])
+        current_value = self.tryPath(self.jsonIn, path_splited[0])
 
         # if  not isinstance(current_value, dict) and not isinstance(current_value, list):
         #    current_value = current_value
@@ -137,7 +139,7 @@ if __name__ == "__main__":
     #simple example
     json = {
         "I": {
-            "want": "this value"
+            "want": "this value in a dict"
         }
     }
 
@@ -150,7 +152,7 @@ if __name__ == "__main__":
     #simple example
     json = {
         "I": {
-            "want": ["this value"]
+            "want": ["this value in a list"]
         }
     }
 
@@ -163,7 +165,7 @@ if __name__ == "__main__":
     #simple example to return one value and other value
     json = {
         "I": {
-            "want": ["this value", "and this value"]
+            "want": ["this value in a list", "and this value in a list"]
         }
     }
 
