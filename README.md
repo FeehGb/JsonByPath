@@ -23,7 +23,7 @@ path = "I/want"
 extracted = JsonByPath(json=json, path=path)
 print( extracted.value )
 ```
->>> result : this value
+ >**Result** :  this value
 
 #### Exemple 2
 - simple example 
@@ -39,7 +39,7 @@ path = "I/want/0"
 extracted = JsonByPath(json=json, path=path)
 print( extracted.value )
 ```
->>> result : this value
+ >**Result** :  this value
 
 
 #### Exemple 3
@@ -56,7 +56,7 @@ path = "I/want/0 && I/want/1"
 extracted = JsonByPath(json=json, path=path)
 print( extracted.value )
 ```
->>> result : this value and this value
+ >**Result** :  this value and this value
 
 #### Exemple 4
 - simple example to return one or other, return the first values valid
@@ -73,7 +73,7 @@ path = "I/want/* || or/this"
 extracted = JsonByPath(json=json, path=path)
 print( extracted.value )
 ```
->>> result : this value and this value
+ >**Result** :  this value and this value
 
 #### Exemple 5
 - simple example to return array values in a Interval 
@@ -89,7 +89,7 @@ path = "I/want/[-1: ]" # to return last value
 extracted = JsonByPath(json=json, path=path)
 print( extracted.value )
 ```
->>> result : Just this value
+ >**Result** :  Just this value
 
 
 #### Exemple 6
@@ -106,7 +106,7 @@ path = "I/want/[0:2]'|'" # to return values between Keys 0 and 2 with  Pipe as s
 extracted = JsonByPath(json=json, path=path)
 print( extracted.value )
 ```
->>> result : this vale|and this value|Maybe this value
+ >**Result** :  this vale|and this value|Maybe this value
 
 
 
