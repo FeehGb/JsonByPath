@@ -52,7 +52,7 @@ json = {
   }
 }
 
-path = "I/want/1 && I/want/1"
+path = "I/want/0 && I/want/1"
 extracted = JsonByPath(json=json, path=path)
 print( extracted.value )
 ```
@@ -75,6 +75,41 @@ print( extracted.value )
 ```
 >>> result : this value and this value
 
+#### Exemple 5
+- simple example to return array values in a Interval 
+```python
+
+json = {
+  "I": {
+    "want" : ["this value", "and this value", "Just this value" ]
+  }
+}
+
+path = "I/want/[-1: ]" # to return last value 
+extracted = JsonByPath(json=json, path=path)
+print( extracted.value )
+```
+>>> result : Just this value
+
+
+#### Exemple 6
+- simple example to return array values in a Interval with separator
+```python
+
+json = {
+  "I": {
+    "want" : ["this value", "and this value", "Maybe this value" ]
+  }
+}
+
+path = "I/want/[0:2]'|'" # to return values between Keys 0 and 2 with  Pipe as separator 
+extracted = JsonByPath(json=json, path=path)
+print( extracted.value )
+```
+>>> result : this vale|and this value|Maybe this value
+
+
+
 ## Built With
 
 * [PYTHON](https://www.python.org/) - Python 3
@@ -84,7 +119,7 @@ print( extracted.value )
 
 ## version
 
-1.0.0
+1.0.1
 
 ## Authors
 
