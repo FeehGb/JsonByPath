@@ -236,7 +236,7 @@ if __name__ == "__main__":
         }
     }
 
-    path = "this/path/notExist || this/path"
+    path = "this/path/doesnotexist || this/path"
     extracted = JsonByPath(json=json, path=path)
     print(extracted.value)
     #result:  exist
