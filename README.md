@@ -59,7 +59,7 @@ print( extracted.value )
  >**Result** :  this value and this value
 
 #### Exemple 4
-- simple example to return one or other, return the first values valid
+- simple example to return one or other, return the first valid value
 ```python
 
 json = {
@@ -109,6 +109,41 @@ print( extracted.value )
  >**Result** :  this vale|and this value|Maybe this value
 
 
+#### Exemple 7
+- simple example to return array values in a Interval with separator
+```python
+json = {
+    "I": {
+        "want": {"these" :["value1", "value2", "value3"]}
+    }
+}
+
+
+# to return values between Keys 0 and 2 with  Pipe as separator
+path = "`My values:` && I/want/these/[0:2]` | `"
+extracted = JsonByPath(json=json, path=path)
+print(extracted.value)
+    
+ ```
+ >>> result:  My values:  value1 | value2
+ 
+    
+#### Exemple 8
+
+```python
+json = {
+    "this": {
+        "path": "exist"
+    }
+}
+
+
+path = "this/path/notExist || this/path"
+extracted = JsonByPath(json=json, path=path)
+print(extracted.value)
+    
+```
+>>>result:  exist
 
 ## Built With
 
@@ -119,7 +154,7 @@ print( extracted.value )
 
 ## version
 
-1.0.1
+1.0.2
 
 ## Authors
 
