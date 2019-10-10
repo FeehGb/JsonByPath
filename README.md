@@ -112,17 +112,17 @@ print( extracted.value )
 #### Exemple 7
 - simple example to return array values in a Interval with separator
 ```python
-    json = {
-        "I": {
-            "want": {"these" :["value1", "value2", "value3"]}
-        }
+json = {
+    "I": {
+        "want": {"these" :["value1", "value2", "value3"]}
     }
+}
 
 
-    # to return values between Keys 0 and 2 with  Pipe as separator
-    path = "`My values:` && I/want/these/[0:2]` | `"
-    extracted = JsonByPath(json=json, path=path)
-    print(extracted.value)
+# to return values between Keys 0 and 2 with  Pipe as separator
+path = "`My values:` && I/want/these/[0:2]` | `"
+extracted = JsonByPath(json=json, path=path)
+print(extracted.value)
     
  ```
  >>> result:  My values:  value1 | value2
@@ -131,16 +131,16 @@ print( extracted.value )
 #### Exemple 8
 
 ```python
-    json = {
-        "this": {
-            "path": "exist"
-        }
+json = {
+    "this": {
+        "path": "exist"
     }
+}
 
-    # to return values between Keys 0 and 2 with  Pipe as separator
-    path = "this/path/notExist || this/path"
-    extracted = JsonByPath(json=json, path=path)
-    print(extracted.value)
+
+path = "this/path/notExist || this/path"
+extracted = JsonByPath(json=json, path=path)
+print(extracted.value)
     
 ```
 >>>result:  exist
