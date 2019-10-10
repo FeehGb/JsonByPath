@@ -59,7 +59,7 @@ print( extracted.value )
 >>> result : this value and this value
 
 #### Exemple 4
-- simple example to return one or other, return the first values valid
+- simple example to return one or other, return the first valid value
 ```python
 
 json = {
