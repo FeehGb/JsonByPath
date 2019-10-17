@@ -46,7 +46,7 @@ class JsonByPath():
             if "&&" in path:
                 plus = self.explode(path, "&&")
                 _filter = self.onlyValidValues(plus)
-                value = " ".join(map(str, plus)) if len(
+                value = "".join(map(str, plus)) if len(
                     plus) == len(_filter) else ''
             else:
                 value = self.goThroughPath(path)
@@ -169,7 +169,7 @@ if __name__ == "__main__":
         }
     }
 
-    path = "I/want/0 && I/want/1"
+    path = "I/want/0 &&` `&& I/want/1"
     extracted = JsonByPath(json=json, path=path)
     print(extracted.value)
     #result: this value and this value
@@ -223,7 +223,7 @@ if __name__ == "__main__":
         }
     }
 
-    path = "`My values:` && I/want/these/[0:2]` | `"
+    path = "`My values: ` && I/want/these/[0:2]` | `"
     extracted = JsonByPath(json=json, path=path)
     print(extracted.value)
     #result:  My values:  value1 | value2
@@ -238,7 +238,7 @@ if __name__ == "__main__":
 
     path = "this/path/doesnotexist || this/path"
     extracted = JsonByPath(json=json, path=path)
-    print(extracted.value)
+    print(extracted.value) 
     #result:  exist
     
     
