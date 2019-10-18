@@ -46,7 +46,6 @@ class JsonByPath():
             if "&&" in path:
                 plus = self.explode(path, "&&")
                 _filter = self.onlyValidValues(plus)
-                #FIXME: empty values cause error when set `` in expression line
                 value = "".join(map(str, _filter))
             else:
                 value = self.goThroughPath(path)
