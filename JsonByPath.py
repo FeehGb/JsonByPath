@@ -46,8 +46,8 @@ class JsonByPath():
             if "&&" in path:
                 plus = self.explode(path, "&&")
                 _filter = self.onlyValidValues(plus)
-                value = "".join(map(str, plus)) if len(
-                    plus) == len(_filter) else ''
+                #FIXME: empty values cause error when set `` in expression line
+                value = "".join(map(str, _filter))
             else:
                 value = self.goThroughPath(path)
 
@@ -169,7 +169,7 @@ if __name__ == "__main__":
         }
     }
 
-    path = "I/want/0 &&` `&& I/want/1"
+    path = "I/want/0 &&``&& I/want/1"
     extracted = JsonByPath(json=json, path=path)
     print(extracted.value)
     #result: this value and this value
