@@ -9,7 +9,7 @@ class JsonByPath():
         self.jsonIn = data['json']
         self.value = list()
         self.error_path = list()
-
+        
         self.process()
         
         self.current_path = ''
@@ -17,17 +17,32 @@ class JsonByPath():
 
     def __repr__(self):
         return self.value
-
+        
+        
+    
+    
     def process(self):
-        self.all = self.explode(self.path, "||")
-        _filter = self.onlyValidValues(self.all)
-        if len(_filter):
-            self.value = _filter[0]
+        #self.all = self.processPath(self.path, "||")
+        #_filter = self.onlyValidValues(self.all)
+        
+        self.all , _filter = self.processByLogic(self.path, "||")
+        # To return only first value valid in ||
+        self.value = _filter[0] if _filter else ''
+        """ if _filter:
+            self.value = 
         else:
-            self.value = ''
-
-    def explode(self, str_to_split, separator):
-        paths = str_to_split.split(separator)
+            self.value = '' """
+        
+        
+    def processByLogic(self,path, operator) :
+        paths_processed = self.processPath(path, operator)
+        filter_done     = self.onlyValidValues(paths_processed)
+        
+        return paths_processed, filter_done
+        
+    
+    def processPath(self, path, separator):
+        paths = path.split(separator)
         return list(map(self.execute, paths))
 
     def onlyValidValues(self, values):
@@ -35,17 +50,19 @@ class JsonByPath():
             Metodo para retornar valores verdadeiros
         """
         #flt = list(filter(lambda value: value is not None and value != 0, values))
-
-        return [value for value in values if value or value == 0]
-
+        return [value for value in values if value or value == 0]  
+        
+    
     def execute(self, path):
         # save path to show log.
         self.current_path = path
         value = ''
         try:
             if "&&" in path:
-                plus = self.explode(path, "&&")
-                _filter = self.onlyValidValues(plus)
+                #plus = self.processPath(path, "&&")
+                #_filter = self.onlyValidValues(plus)
+                plus, _filter = self.processByLogic(path, "&&")
+                
                 value = "".join(map(str, _filter))
             else:
                 value = self.goThroughPath(path)
@@ -179,7 +196,7 @@ if __name__ == "__main__":
         "I": {
             "want": ["this value", "and this value"]
         },
-        "or": {"this": "this value"}
+        "or": {"this": False}
     }
 
     path = "I/want/* || or/this"
@@ -195,7 +212,7 @@ if __name__ == "__main__":
         }
     }
 
-    path = "I/want/[-1: ]"  # to return last value
+    path = "I/want/[-1: ]"  # to return last value, or I/want/-1"
     extracted = JsonByPath(json=json, path=path)
     print(extracted.value)
     #result: Just this value
@@ -239,6 +256,25 @@ if __name__ == "__main__":
     extracted = JsonByPath(json=json, path=path)
     print(extracted.value) 
     #result:  exist
+    
+    
+    #Exemple 9
+    #simple example to return one or other, return the first valid value
+    json = {
+        "I": {
+            "want": ["this value", "and this value"]
+        },
+        "or": {"this": False}
+    }
+    
+    #                                      |---> path does not exist
+    #                        |---> path exists
+    #           |---> path does not exist |
+    #           |           |            |
+    path = "I/wants/* || or/this || or/these"
+    extracted = JsonByPath(json=json, path=path)
+    print(extracted.value)
+    #result: False
     
     
 
