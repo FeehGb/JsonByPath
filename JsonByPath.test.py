@@ -1,5 +1,5 @@
 import unittest
-from JsonByPath import JsonByPath
+import JsonByPath
 
 class tests(unittest.TestCase):
     def test_01(self):
